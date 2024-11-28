@@ -1,4 +1,4 @@
-Kotlin 2.1 language feature updates
+## Kotlin 2.1 language feature updates
 
 * Support for requiring opt-in to extend APIs (@SubclassOptInRequired)
 * Non-local break and continue
