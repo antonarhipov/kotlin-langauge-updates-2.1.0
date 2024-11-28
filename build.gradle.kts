@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.jspecify:jspecify:1.0.0")
     testImplementation(kotlin("test"))
 }
 
@@ -33,8 +34,9 @@ kotlin {
 //        freeCompilerArgs.add("-Xwhen-guards")
 //        freeCompilerArgs.add("-Xmulti-dollar-interpolation")
 //        freeCompilerArgs.add("-Xnon-local-break-continue")
+//        freeCompilerArgs.add("--Xnullability-annotations=strict")  // ignore | warning | strict
 //    }
-
+//}
     sourceSets.all {
         languageSettings {
             enableLanguageFeature(LanguageFeature.WhenGuards.name)
