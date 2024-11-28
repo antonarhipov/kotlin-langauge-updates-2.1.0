@@ -1,43 +1,32 @@
 package org.kotlinlang
 
+// this could be written quite similar with nesting
+fun render(status: Status): String = when (status) {
+    Status.Loading -> "loading"
+    is Status.Ok if status.info.isEmpty() -> "no data"
+    is Status.Ok -> status.info.joinToString()
+    is Status.Error if status.problem == Problem.CONNECTION ->
+        "problems with connection"
+    is Status.Error if status.problem == Problem.AUTHENTICATION ->
+        "could not be authenticated"
+    else -> "unknown problem"
+}
 
-sealed interface Creature
+// this one is harder to write with nesting, so guards improve the readibility
+fun renderWithGuards(status: Status): String = when (status) {
+    Status.Loading -> "loading"
+    is Status.Ok if status.info.isNotEmpty() -> status.info.joinToString()
+    is Status.Error if status.isCritical -> "critical problem"
+    else -> "problem, try again"
+}
 
-data class Cthulhu(
-    val madnessLevel: Int,
-    val isAwakened: Boolean
-) : Creature
+sealed interface Status {
+    object Loading : Status
+    data class Ok(val info: List<String>) : Status
+    data class Error(val problem: Problem, val isCritical: Boolean = false) : Status
+}
 
-data class Kraken(
-    val length: Double,
-    val isAggressive: Boolean
-) : Creature
-
-
-
-fun describeCreature(creature: Creature) =
-    when (creature) {
-        is Cthulhu if
-        creature.isAwakened -> "Cthulhu has awakened with madness level of ${creature.madnessLevel}!"
-
-        is Kraken if
-        creature.isAggressive -> "A ${creature.length}-meter long Kraken is attacking furiously!"
-
-        else -> "It's a cute ${creature::class.simpleName}"
-    }
-
-
-
-fun main() {
-    val creatures: List<Creature> = listOf(
-        Cthulhu(madnessLevel = 9001, isAwakened = true),
-        Cthulhu(madnessLevel = 42, isAwakened = false),
-        Kraken(length = 20.5, isAggressive = true),
-        Kraken(length = 15.0, isAggressive = false)
-    )
-
-    creatures.forEach { creature ->
-        println(describeCreature(creature))
-    }
+enum class Problem {
+    CONNECTION, AUTHENTICATION
 }
 
